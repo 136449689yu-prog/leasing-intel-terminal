@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>招商情报作战终端 Pro</title>
+<style>
+:root{--bg:#070b14;--panel:#0f1626;--panel2:#131d31;--line:#1e2c45;--txt:#e6edf7;--dim:#7d8ba3;--cy:#22d3ee;--gr:#34d399;--or:#fb923c;--rd:#f87171;--pu:#a78bfa}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.5;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 15% 0%,rgba(34,211,238,.08),transparent 40%),radial-gradient(circle at 85% 10%,rgba(167,139,250,.07),transparent 45%);pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:1560px;margin:0 auto;padding:0 24px 60px}
+header{display:flex;align-items:center;justify-content:space-between;padding:26px 0 20px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:16px}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--cy),var(--pu));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:#06121c;box-shadow:0 0 24px rgba(34,211,238,.35)}
+.brand h1{font-size:20px;letter-spacing:.5px}
+.brand .tag{font-size:11px;color:var(--cy);letter-spacing:2px;text-transform:uppercase}
+.hd-right{display:flex;align-items:center;gap:12px}
+.live{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--gr);background:rgba(52,211,153,.08);padding:6px 12px;border-radius:20px;border:1px solid rgba(52,211,153,.2)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gr);box-shadow:0 0 8px var(--gr);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.btn{background:var(--panel2);border:1px solid var(--line);color:var(--txt);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:12px;transition:.2s}
+.btn:hover{border-color:var(--cy);color:var(--cy)}
+.section-t{font-size:13px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin:30px 0 14px;display:flex;align-items:center;gap:10px}
+.section-t::after{content:"";flex:1;height:1px;background:var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.kpi{background:linear-gradient(145deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle,var(--accent,var(--cy)),transparent 70%);opacity:.09}
+.kpi .l{font-size:12px;color:var(--dim)}
+.kpi .v{font-size:30px;font-weight:800;margin:8px 0 2px;color:var(--accent,var(--cy));letter-spacing:-1px}
+.kpi .d{font-size:11px;color:var(--dim)}
+.kpi .d b{color:var(--txt);font-weight:600}
+.grid2{display:grid;grid-template-columns:1.15fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+.panel h3{font-size:14px;margin-bottom:4px;font-weight:700}
+.panel .hint{font-size:11px;color:var(--dim);margin-bottom:16px}
+canvas{max-width:100%}
+.chart-box{position:relative;height:260px}
+.chart-box.sm{height:210px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--dim);font-weight:600;padding:10px 8px;border-bottom:1px solid var(--line);font-size:11px;position:sticky;top:0;background:var(--panel)}
+td{padding:9px 8px;border-bottom:1px solid rgba(30,44,69,.5)}
+tbody tr:hover{background:rgba(34,211,238,.04)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.hl{color:var(--cy);font-weight:700}
+.idx{color:var(--dim);width:36px}
+.nm{font-weight:600;display:block}
+.sub{font-size:10px;color:var(--dim);display:block}
+.badge{font-size:10px;padding:3px 9px;border-radius:12px;white-space:nowrap}
+.b-hot{background:rgba(251,146,60,.14);color:var(--or)}
+.b-done{background:rgba(52,211,153,.14);color:var(--gr)}
+.b-dead{background:rgba(248,113,113,.1);color:var(--dim)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.toolbar input,.toolbar select{background:var(--bg);border:1px solid var(--line);color:var(--txt);padding:9px 12px;border-radius:8px;font-size:12px;outline:none}
+.toolbar input:focus,.toolbar select:focus{border-color:var(--cy)}
+.toolbar input{flex:1;min-width:200px}
+.tbl-wrap{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.stat-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.stat-row:last-child{border:0}
+.stat-row .k{color:var(--dim)}
+.stat-row .val{font-weight:700}
+.bar{height:7px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:6px}
+.bar>i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cy),var(--pu))}
+.leads{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;max-height:440px;overflow:auto;padding-right:6px}
+.lead-card{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px;border-left:3px solid var(--or)}
+.lead-top{display:flex;justify-content:space-between;align-items:center}
+.lead-name{font-weight:700;font-size:14px}
+.lead-area{color:var(--cy);font-weight:700;font-size:13px}
+.lead-biz{font-size:11px;color:var(--dim);margin:6px 0}
+.lead-meta{font-size:11px;color:var(--dim)}
+.lead-foot{display:flex;justify-content:space-between;margin-top:10px;font-size:10px;color:var(--dim);border-top:1px solid var(--line);padding-top:8px}
+.fire{color:var(--or)}
+.rec{background:linear-gradient(135deg,rgba(251,146,60,.08),rgba(167,139,250,.05));border:1px solid rgba(251,146,60,.2);border-radius:14px;padding:20px}
+.rec h3{color:var(--or);margin-bottom:12px}
+.rec ol{padding-left:18px;font-size:12px;line-height:1.9;color:var(--dim)}
+.rec ol b{color:var(--txt)}
+footer{text-align:center;color:var(--dim);font-size:11px;padding:30px 0 10px;border-top:1px solid var(--line);margin-top:40px}
+@media(max-width:1000px){.grid2,.grid3{grid-template-columns:1fr}}
+@media print{body{background:#fff;color:#000}.panel,.kpi{border-color:#ccc;background:#fff}header,footer{display:none}}
+
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:99;padding:20px}
+.mask.on{display:flex}
+.modal{background:var(--panel);border:1px solid var(--cy);border-radius:16px;padding:26px;max-width:640px;width:100%;box-shadow:0 0 50px rgba(34,211,238,.15)}
+.modal h2{font-size:18px;margin-bottom:6px}
+.modal .mh{font-size:12px;color:var(--dim);margin-bottom:18px}
+.modal textarea{width:100%;height:150px;background:var(--bg);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:12px;font-size:12px;font-family:monospace;outline:none;resize:vertical}
+.modal textarea:focus{border-color:var(--cy)}
+.modal .row{display:flex;gap:10px;align-items:center;margin:14px 0;flex-wrap:wrap}
+.modal .btn{padding:10px 18px}
+.modal .tip{font-size:11px;color:var(--dim);line-height:1.7;background:rgba(34,211,238,.05);border-left:2px solid var(--cy);padding:10px 12px;border-radius:4px}
+#impMsg{font-size:12px;margin-top:10px;min-height:18px}
+.ok{color:var(--gr)}.err{color:var(--rd)}
+</style></head><body>
+<div class="wrap">
+<div class="mask" id="mask">
+<div class="modal">
+<h2>⬆ 导入你的真实客户数据</h2>
+<div class="mh">支持 CSV 文本粘贴、CSV/JSON 文件上传 · 自动识别中文列名 · 数据仅在本地浏览器处理，不上传</div>
+<div class="row">
+<input type="file" id="file" accept=".csv,.json,.txt" onchange="onFile(event)" style="font-size:12px;color:var(--dim)">
+<button class="btn" onclick="doImport()">开始导入并刷新看板</button>
+<button class="btn ghost" onclick="closeImport()">取消</button>
+</div>
+<textarea id="csv" placeholder="粘贴 CSV 内容，例如：&#10;客户名称,经营业态,意向面积（㎡）,当前状态,是否有意向,项目名称,负责人&#10;王总,火锅,300,跟进中,是,圣地大厦,张三"></textarea>
+<div class="tip"><b>识别列：</b>客户名称 / 品牌名称 / 经营业态 / 意向面积（㎡） / 当前状态 / 是否有意向 / 项目名称 / 负责人 / 客户来源 / 最近跟进日期。列名可写成常见同义词，缺失列自动留空。首行需为表头。</div>
+<div id="impMsg"></div>
+</div></div>
+
+<header>
+<div class="brand"><div class="logo">情</div><div><div class="tag">LEASING INTELLIGENCE TERMINAL</div><h1>招商情报作战终端 <span style="color:var(--cy)">Pro</span></h1></div></div>
+<div class="hd-right"><div class="live"><span class="dot"></span>数据已加载 · 2026-11-26 16:37</div><button class="btn" onclick="openImport()">⬆ 导入真实数据</button><button class="btn" onclick="window.print()">导出报告</button></div>
+</header>
+
+<div class="section-t">核心战况总览 · COMMAND OVERVIEW</div>
+<div class="kpis">
+<div class="kpi" style="--accent:var(--cy)"><div class="l">累计客户池</div><div class="v">303</div><div class="d">覆盖 <b>5</b> 个项目</div></div>
+<div class="kpi" style="--accent:var(--gr)"><div class="l">意向客户</div><div class="v">174</div><div class="d">意向率 <b>57.4%</b></div></div>
+<div class="kpi" style="--accent:var(--or)"><div class="l">跟进中</div><div class="v">26</div><div class="d">高价值 <b>26</b> 条</div></div>
+<div class="kpi" style="--accent:var(--pu)"><div class="l">已成交</div><div class="v">2</div><div class="d">转化率 <b>7.7%</b></div></div>
+<div class="kpi" style="--accent:var(--rd)"><div class="l">累计跟进面积</div><div class="v">75,324</div><div class="d">平方米 · 意向需求</div></div>
+<div class="kpi" style="--accent:var(--cy)"><div class="l">11月新增</div><div class="v">210</div><div class="d">环比 <b>+1650%</b> 🚀</div></div>
+</div>
+
+<div class="section-t">经营指标达成 · PERFORMANCE</div>
+<div class="grid2">
+<div class="panel"><h3>新签面积 · 计划 vs 实际</h3><div class="hint">全年累计 计划 5,638.4㎡ / 实际 6,023.3㎡ · 达成率 106.8%</div><div class="chart-box"><canvas id="c1"></canvas></div></div>
+<div class="panel"><h3>租管收入 · 计划 vs 实际（万元）</h3><div class="hint">全年累计 计划 40.44万 / 实际 29.97万</div><div class="chart-box"><canvas id="c2"></canvas></div></div>
+</div>
+
+<div class="section-t">客户结构分析 · SEGMENTATION</div>
+<div class="grid3">
+<div class="panel"><h3>客户状态漏斗</h3><div class="hint">从线索到成交的转化路径</div><div class="chart-box sm"><canvas id="c3"></canvas></div></div>
+<div class="panel"><h3>业态偏好 TOP10</h3><div class="hint">客户经营业态分布</div><div class="chart-box sm"><canvas id="c4"></canvas></div></div>
+<div class="panel"><h3>获客渠道分布</h3><div class="hint">客户来源结构</div><div class="chart-box sm"><canvas id="c5"></canvas></div></div>
+</div>
+
+<div class="grid2" style="margin-top:16px">
+<div class="panel"><h3>流失原因归因</h3><div class="hint">已放弃客户的核心痛点 — 谈判突破口</div><div class="chart-box sm"><canvas id="c6"></canvas></div></div>
+<div class="panel"><h3>团队战绩榜</h3><div class="hint">负责人客户持有量</div><div class="chart-box sm"><canvas id="c7"></canvas></div></div>
+</div>
+
+<div class="section-t">项目作战矩阵 · PROJECT MATRIX</div>
+<div class="panel"><h3>各项目客户储备与意向热度</h3><div class="hint">按客户总量排序 · 高亮列为核心意向客户数</div>
+<div class="tbl-wrap" style="max-height:none"><table><thead><tr><th>项目</th><th class="num">客户总数</th><th class="num">有意向</th><th class="num">跟进中</th><th class="num">已成交</th><th class="num">意向面积(㎡)</th></tr></thead><tbody><tr><td>白云项目</td><td class='num'>135</td><td class='num hl'>59</td><td class='num'>19</td><td class='num'>2</td><td class='num'>28670</td></tr>
+<tr><td>圣地新天地项目</td><td class='num'>87</td><td class='num hl'>87</td><td class='num'>0</td><td class='num'>0</td><td class='num'>21238</td></tr>
+<tr><td>双成项目</td><td class='num'>63</td><td class='num hl'>23</td><td class='num'>4</td><td class='num'>0</td><td class='num'>24926</td></tr>
+<tr><td>银燕教育成项目</td><td class='num'>16</td><td class='num hl'>3</td><td class='num'>3</td><td class='num'>0</td><td class='num'>400</td></tr>
+<tr><td>云方商汇项目</td><td class='num'>2</td><td class='num hl'>2</td><td class='num'>0</td><td class='num'>0</td><td class='num'>90</td></tr></tbody></table></div></div>
+
+<div class="section-t">高价值线索池 · HOT LEADS <span style="color:var(--or);font-size:12px">（26 条高意向跟进中）</span></div>
+<div class="leads"><div class="lead-card">
+<div class="lead-top"><span class="lead-name">李先生</span><span class="lead-area">80㎡</span></div>
+<div class="lead-biz">简餐/快餐（便当、粉面、麻辣烫） · 花甲粉</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-02</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">林先生</span><span class="lead-area">20㎡</span></div>
+<div class="lead-biz">小吃（炸物、卤味、小食档口） · 憨土豆</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-02</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">杨先生</span><span class="lead-area">200㎡</span></div>
+<div class="lead-biz">特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)） · 云南野生菌火锅</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 其他线上方式</div>
+<div class="lead-foot"><span>2026-11-02</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">高先生</span><span class="lead-area">220㎡</span></div>
+<div class="lead-biz">特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)） · 云山莱火锅</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 行业群</div>
+<div class="lead-foot"><span>2026-11-03</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">廖总</span><span class="lead-area">80㎡</span></div>
+<div class="lead-biz">简餐/快餐（便当、粉面、麻辣烫） · 云南米线</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-03</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">程先生</span><span class="lead-area">200㎡</span></div>
+<div class="lead-biz">餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套）） · 老营长大缸烧烤</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-03</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">水哥</span><span class="lead-area">200㎡</span></div>
+<div class="lead-biz">特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)） · 潮德阿水牛肉火锅</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-03</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">贺栋国</span><span class="lead-area">300㎡</span></div>
+<div class="lead-biz">网咖 · 永泰电竞</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-03</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">邢总</span><span class="lead-area">80㎡</span></div>
+<div class="lead-biz">餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套）） · 羊肉烧烤</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-04</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">盖先生</span><span class="lead-area">280㎡</span></div>
+<div class="lead-biz">网咖 · 青柚电竞</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-04</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">李总</span><span class="lead-area">50㎡</span></div>
+<div class="lead-biz">简餐/快餐（便当、粉面、麻辣烫） · 麻辣烫</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-04</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">萧子茂</span><span class="lead-area">200㎡</span></div>
+<div class="lead-biz">特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)） · 牛肉火锅</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-04</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">王总</span><span class="lead-area">100㎡</span></div>
+<div class="lead-biz">特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)） · 傣条鱼</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-05</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">雷总</span><span class="lead-area">80㎡</span></div>
+<div class="lead-biz">餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套）） · 清吧</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-05</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">张总</span><span class="lead-area">20㎡</span></div>
+<div class="lead-biz">茶饮咖啡（茶饮、奶茶、咖啡） · 有堂古</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-05</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">刘总</span><span class="lead-area">180㎡</span></div>
+<div class="lead-biz">中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶） · 顺德菜</div>
+<div class="lead-meta">白云项目 · 负责人 张汉翔 · 电话</div>
+<div class="lead-foot"><span>2026-11-05</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">李生</span><span class="lead-area">50㎡</span></div>
+<div class="lead-biz">生活配套服务（洗染服务） · 干洗店</div>
+<div class="lead-meta">白云项目 · 负责人 曾令宝 · 外出拓展</div>
+<div class="lead-foot"><span>2026-11-02</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">曾生</span><span class="lead-area">200㎡</span></div>
+<div class="lead-biz">中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶） · 湘菜</div>
+<div class="lead-meta">白云项目 · 负责人 曾令宝 · 其他线上方式</div>
+<div class="lead-foot"><span>2026-11-03</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">冯先生</span><span class="lead-area">100㎡</span></div>
+<div class="lead-biz">餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套）） · 酌重酒馆</div>
+<div class="lead-meta">白云项目 · 负责人 曾令宝 · 电话邀约</div>
+<div class="lead-foot"><span>2026-11-11</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">李老师</span><span class="lead-area">100㎡</span></div>
+<div class="lead-biz">少儿培训 · 博雅教育</div>
+<div class="lead-meta">银燕教育成项目 · 负责人 许红敏 · 电话</div>
+<div class="lead-foot"><span>2026-09-27</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">黄老师</span><span class="lead-area">50㎡</span></div>
+<div class="lead-biz">少儿培训 · 好字笔墨</div>
+<div class="lead-meta">银燕教育成项目 · 负责人 许红敏 · 电话</div>
+<div class="lead-foot"><span>2026-11-02</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">李老师</span><span class="lead-area">100㎡</span></div>
+<div class="lead-biz">少儿培训 · 博雅教育</div>
+<div class="lead-meta">银燕教育成项目 · 负责人 许红敏 · 电话</div>
+<div class="lead-foot"><span>2026-09-27</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">阮生</span><span class="lead-area">1000㎡</span></div>
+<div class="lead-biz">汽车贸易 · 品牌A</div>
+<div class="lead-meta">双成项目 · 负责人 郑真奇 · 外出拓展</div>
+<div class="lead-foot"><span>2026-11-01</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">bop贴膜</span><span class="lead-area">1000㎡</span></div>
+<div class="lead-biz">维修 · bop</div>
+<div class="lead-meta">双成项目 · 负责人 郑真奇 · 外出拓展</div>
+<div class="lead-foot"><span>2026-08-01</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">阮生</span><span class="lead-area">1000㎡</span></div>
+<div class="lead-biz">汽车贸易 · 品牌A</div>
+<div class="lead-meta">双成项目 · 负责人 郑真奇 · 外出拓展</div>
+<div class="lead-foot"><span>0216-11-15</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div>
+<div class="lead-card">
+<div class="lead-top"><span class="lead-name">阮生</span><span class="lead-area">1000㎡</span></div>
+<div class="lead-biz">汽车贸易 · 品牌A</div>
+<div class="lead-meta">双成项目 · 负责人 郑真奇 · 外出拓展</div>
+<div class="lead-foot"><span>2026-11-15</span><span class="fire">🔥 高意向 · 跟进中</span></div>
+</div></div>
+
+<div class="section-t">全量客户情报库 · FULL DATABASE <span style="color:var(--dim);font-size:12px">（303 条）</span></div>
+<div class="panel">
+<div class="toolbar">
+<input id="q" placeholder="🔍 搜索客户 / 品牌 / 业态 / 负责人..." oninput="filter()">
+<select id="fstatus" onchange="filter()"><option value="">全部状态</option><option value="跟进中">跟进中</option><option value="已成交">已成交</option><option value="已放弃">已放弃</option></select>
+<select id="fintent" onchange="filter()"><option value="">全部意向</option><option value="是">高意向</option><option value="否">普通</option></select>
+<select id="fproj" onchange="filter()"><option value="">全部项目</option><option value="云方商汇项目">云方商汇项目</option><option value="双成项目">双成项目</option><option value="圣地新天地项目">圣地新天地项目</option><option value="白云项目">白云项目</option><option value="银燕教育成项目">银燕教育成项目</option></select>
+<span id="cnt" style="font-size:12px;color:var(--dim);margin-left:auto"></span>
+</div>
+<div class="tbl-wrap"><table id="tbl"><thead><tr><th>#</th><th>客户/品牌</th><th>经营业态</th><th>项目</th><th class="num">面积㎡</th><th>负责人</th><th>状态</th><th>最近跟进</th></tr></thead><tbody id="tbody"><tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">1</td><td><span class="nm">李先生</span><span class="sub">花甲粉</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">80</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="小吃（炸物、卤味、小食档口）">
+<td class="idx">2</td><td><span class="nm">林先生</span><span class="sub">憨土豆</span></td>
+<td>小吃（炸物、卤味、小食档口）</td><td>白云项目</td>
+<td class="num">20</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">3</td><td><span class="nm">陈先生</span><span class="sub">原时烤肉电音酒场</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">120</td><td>张汉翔</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">4</td><td><span class="nm">刘先生</span><span class="sub">林啊珍荔枝烧鹅</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">60</td><td>张汉翔</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">5</td><td><span class="nm">郝先生</span><span class="sub">老昌春饼东北菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">80</td><td>张汉翔</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">6</td><td><span class="nm">杨先生</span><span class="sub">云南野生菌火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">7</td><td><span class="nm">高先生</span><span class="sub">云山莱火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">220</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">8</td><td><span class="nm">廖总</span><span class="sub">云南米线</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">80</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">9</td><td><span class="nm">程先生</span><span class="sub">老营长大缸烧烤</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">200</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">10</td><td><span class="nm">林总</span><span class="sub">有谷气</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">60</td><td>张汉翔</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">11</td><td><span class="nm">水哥</span><span class="sub">潮德阿水牛肉火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="网咖">
+<td class="idx">12</td><td><span class="nm">贺栋国</span><span class="sub">永泰电竞</span></td>
+<td>网咖</td><td>白云项目</td>
+<td class="num">300</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">13</td><td><span class="nm">陈总</span><span class="sub">火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>张汉翔</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">14</td><td><span class="nm">邢总</span><span class="sub">羊肉烧烤</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">80</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">15</td><td><span class="nm">郝总</span><span class="sub">精酿酒馆</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">80</td><td>张汉翔</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="网咖">
+<td class="idx">16</td><td><span class="nm">盖先生</span><span class="sub">青柚电竞</span></td>
+<td>网咖</td><td>白云项目</td>
+<td class="num">280</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">17</td><td><span class="nm">李总</span><span class="sub">麻辣烫</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">50</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">18</td><td><span class="nm">萧子茂</span><span class="sub">牛肉火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">19</td><td><span class="nm">荣哥</span><span class="sub">阿塞小面</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">50</td><td>张汉翔</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">20</td><td><span class="nm">王总</span><span class="sub">傣条鱼</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">100</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">21</td><td><span class="nm">雷总</span><span class="sub">清吧</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">80</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">22</td><td><span class="nm">冯先生</span><span class="sub">布车韩式酒馆</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">150</td><td>张汉翔</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="茶饮咖啡（茶饮、奶茶、咖啡）">
+<td class="idx">23</td><td><span class="nm">张总</span><span class="sub">有堂古</span></td>
+<td>茶饮咖啡（茶饮、奶茶、咖啡）</td><td>白云项目</td>
+<td class="num">20</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">24</td><td><span class="nm">刘总</span><span class="sub">顺德菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">180</td><td>张汉翔</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="生活配套服务（洗染服务）">
+<td class="idx">25</td><td><span class="nm">李生</span><span class="sub">干洗店</span></td>
+<td>生活配套服务（洗染服务）</td><td>白云项目</td>
+<td class="num">50</td><td>曾令宝</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">26</td><td><span class="nm">刘生</span><span class="sub">卤水店</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">50</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">27</td><td><span class="nm">陈生</span><span class="sub">菌小白</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">28</td><td><span class="nm">李生</span><span class="sub">素食</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">29</td><td><span class="nm">陈小姐</span><span class="sub">素食</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">30</td><td><span class="nm">林小姐</span><span class="sub">融合菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">31</td><td><span class="nm">凌店长</span><span class="sub">湘菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">32</td><td><span class="nm">曾生</span><span class="sub">湘菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="小吃（炸物、卤味、小食档口）">
+<td class="idx">33</td><td><span class="nm">刘生</span><span class="sub">零食</span></td>
+<td>小吃（炸物、卤味、小食档口）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">34</td><td><span class="nm">利生</span><span class="sub">麻辣烫</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">50</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">35</td><td><span class="nm">陆生</span><span class="sub">客家菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">36</td><td><span class="nm">温生</span><span class="sub">火焰鹅</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="沐足">
+<td class="idx">37</td><td><span class="nm">陈生</span><span class="sub">沐足</span></td>
+<td>沐足</td><td>白云项目</td>
+<td class="num">80</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">38</td><td><span class="nm">吕生</span><span class="sub">饺子面条</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">80</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="小吃（炸物、卤味、小食档口）">
+<td class="idx">39</td><td><span class="nm">文生</span><span class="sub">猪脚饭</span></td>
+<td>小吃（炸物、卤味、小食档口）</td><td>白云项目</td>
+<td class="num">80</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="服饰鞋包">
+<td class="idx">40</td><td><span class="nm">吴生</span><span class="sub">女装</span></td>
+<td>服饰鞋包</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="网咖">
+<td class="idx">41</td><td><span class="nm">李生</span><span class="sub">电竞</span></td>
+<td>网咖</td><td>白云项目</td>
+<td class="num">500</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">42</td><td><span class="nm">卢生</span><span class="sub">鸡煲</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">43</td><td><span class="nm">林生</span><span class="sub">鸡煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">44</td><td><span class="nm">曹生</span><span class="sub">红烧乳鸽</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">45</td><td><span class="nm">李小姐</span><span class="sub">猪肚鸡</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="茶饮咖啡（茶饮、奶茶、咖啡）">
+<td class="idx">46</td><td><span class="nm">刘小姐</span><span class="sub">柠檬茶</span></td>
+<td>茶饮咖啡（茶饮、奶茶、咖啡）</td><td>白云项目</td>
+<td class="num">50</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="超市/生鲜">
+<td class="idx">47</td><td><span class="nm">翁先生</span><span class="sub">生活超市</span></td>
+<td>超市/生鲜</td><td>白云项目</td>
+<td class="num">300</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">48</td><td><span class="nm">龙先生</span><span class="sub">炒鸡</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">49</td><td><span class="nm">陈先生</span><span class="sub">蒸汽火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">50</td><td><span class="nm">万先生</span><span class="sub">鸡煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="理疗养生">
+<td class="idx">51</td><td><span class="nm">何先生</span><span class="sub">养生馆</span></td>
+<td>理疗养生</td><td>白云项目</td>
+<td class="num">50</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">52</td><td><span class="nm">邹先生</span><span class="sub">湘菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已成交" data-intent="是" data-project="白云项目" data-biz="办公">
+<td class="idx">53</td><td><span class="nm">李先生</span><span class="sub">办公</span></td>
+<td>办公</td><td>白云项目</td>
+<td class="num">50</td><td>曾令宝</td>
+<td><span class="badge b-done">已成交</span></td><td>2026-11-10</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="健身">
+<td class="idx">54</td><td><span class="nm">李经理</span><span class="sub">自助健身</span></td>
+<td>健身</td><td>白云项目</td>
+<td class="num">500</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-07</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="健身">
+<td class="idx">55</td><td><span class="nm">吴金锋</span><span class="sub">优力</span></td>
+<td>健身</td><td>白云项目</td>
+<td class="num">500</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-07</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="小吃（炸物、卤味、小食档口）">
+<td class="idx">56</td><td><span class="nm">老王</span><span class="sub">阿琴包点</span></td>
+<td>小吃（炸物、卤味、小食档口）</td><td>白云项目</td>
+<td class="num">50</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-07</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="超市/生鲜">
+<td class="idx">57</td><td><span class="nm">郑先生</span><span class="sub">天虹超市</span></td>
+<td>超市/生鲜</td><td>白云项目</td>
+<td class="num">800</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-16</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="服饰鞋包">
+<td class="idx">58</td><td><span class="nm">廖先生</span><span class="sub">服装折扣店</span></td>
+<td>服饰鞋包</td><td>白云项目</td>
+<td class="num">200</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-10</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="酒店公寓">
+<td class="idx">59</td><td><span class="nm">熊先生</span><span class="sub">公寓</span></td>
+<td>酒店公寓</td><td>白云项目</td>
+<td class="num">3000</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-11</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="桌球">
+<td class="idx">60</td><td><span class="nm">刘先生</span><span class="sub">桌球棋牌</span></td>
+<td>桌球</td><td>白云项目</td>
+<td class="num">1500</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="棋牌">
+<td class="idx">61</td><td><span class="nm">鲁先生</span><span class="sub">德州酒馆</span></td>
+<td>棋牌</td><td>白云项目</td>
+<td class="num">150</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="办公">
+<td class="idx">62</td><td><span class="nm">唐小姐</span><span class="sub">办公</span></td>
+<td>办公</td><td>白云项目</td>
+<td class="num">100</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="理疗养生">
+<td class="idx">63</td><td><span class="nm">陈先生</span><span class="sub">养生理疗</span></td>
+<td>理疗养生</td><td>白云项目</td>
+<td class="num">150</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="影院">
+<td class="idx">64</td><td><span class="nm">王先生</span><span class="sub">私人影院</span></td>
+<td>影院</td><td>白云项目</td>
+<td class="num">150</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="办公">
+<td class="idx">65</td><td><span class="nm">黄先生</span><span class="sub">办公</span></td>
+<td>办公</td><td>白云项目</td>
+<td class="num">30</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-07</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="桌球">
+<td class="idx">66</td><td><span class="nm">陈先生</span><span class="sub">桌球棋牌</span></td>
+<td>桌球</td><td>白云项目</td>
+<td class="num">1500</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-08</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="仓储">
+<td class="idx">67</td><td><span class="nm">李先生</span><span class="sub">仓储配送</span></td>
+<td>仓储</td><td>白云项目</td>
+<td class="num">500</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-08</td>
+</tr>
+<tr data-status="已成交" data-intent="是" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">68</td><td><span class="nm">陶先生</span><span class="sub">粉面馆</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">50</td><td>董凡</td>
+<td><span class="badge b-done">已成交</span></td><td>2026-11-08</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">69</td><td><span class="nm">罗先生</span><span class="sub">冒胖子麻辣烫</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">50</td><td>董凡</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-08</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">70</td><td><span class="nm">罗总</span><span class="sub">美好食光湘菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">71</td><td><span class="nm">李生</span><span class="sub">烧鸡</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">72</td><td><span class="nm">郭小姐</span><span class="sub">烤肉</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">73</td><td><span class="nm">许小姐</span><span class="sub">云顶烧烤</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">74</td><td><span class="nm">马生</span><span class="sub">马鲁特烤肉</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">75</td><td><span class="nm">梁生</span><span class="sub">尊宝披萨</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">80</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">76</td><td><span class="nm">陈生</span><span class="sub">大吉家烤肉</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">77</td><td><span class="nm">李生</span><span class="sub">厅四季椰子鸡</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">78</td><td><span class="nm">杨生</span><span class="sub">齐齐哈尔烤肉</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">79</td><td><span class="nm">陆生</span><span class="sub">养生鸡煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">80</td><td><span class="nm">李生</span><span class="sub">好浪脆肉皖</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">81</td><td><span class="nm"></span><span class="sub">南瑶里</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">82</td><td><span class="nm"></span><span class="sub">百潮鸡煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">83</td><td><span class="nm"></span><span class="sub">东北铁锅炖</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="超市/生鲜">
+<td class="idx">84</td><td><span class="nm">郑生</span><span class="sub">新佳宜超市</span></td>
+<td>超市/生鲜</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="超市/生鲜">
+<td class="idx">85</td><td><span class="nm">邱生</span><span class="sub">便利超市</span></td>
+<td>超市/生鲜</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">86</td><td><span class="nm">任小姐</span><span class="sub">猪脚饭</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">60</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">87</td><td><span class="nm">李生</span><span class="sub">尊宝披萨</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">60</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">88</td><td><span class="nm">冯先生</span><span class="sub">酌重酒馆</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-11</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="食品特产">
+<td class="idx">89</td><td><span class="nm">刘生</span><span class="sub">好想来</span></td>
+<td>食品特产</td><td>白云项目</td>
+<td class="num">80</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-13</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">90</td><td><span class="nm">张生</span><span class="sub">东北菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">80</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">91</td><td><span class="nm">刘生</span><span class="sub">九阿鸽</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">130</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">92</td><td><span class="nm">李生</span><span class="sub">鸡煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">93</td><td><span class="nm">陈生</span><span class="sub">重庆火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">94</td><td><span class="nm">刘生</span><span class="sub">野生菌火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="仓储">
+<td class="idx">95</td><td><span class="nm">陈生</span><span class="sub">仓库</span></td>
+<td>仓储</td><td>白云项目</td>
+<td class="num">500</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="仓储">
+<td class="idx">96</td><td><span class="nm">刘生</span><span class="sub">仓库</span></td>
+<td>仓储</td><td>白云项目</td>
+<td class="num">500</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">97</td><td><span class="nm">陈生</span><span class="sub">东北烧烤</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">120</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">98</td><td><span class="nm">莫生</span><span class="sub">酸菜鱼</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">120</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="棋牌">
+<td class="idx">99</td><td><span class="nm">郑生</span><span class="sub">棋牌</span></td>
+<td>棋牌</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-18</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="早餐">
+<td class="idx">100</td><td><span class="nm">徐生</span><span class="sub">包子铺</span></td>
+<td>早餐</td><td>白云项目</td>
+<td class="num">30</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">101</td><td><span class="nm">陈生</span><span class="sub">陈粤记煲仔粥</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-18</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">102</td><td><span class="nm">形生</span><span class="sub">蜀鱼火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-18</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">103</td><td><span class="nm">李生</span><span class="sub">小顺德菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">104</td><td><span class="nm">蓝生</span><span class="sub">称重快餐</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="超市/生鲜">
+<td class="idx">105</td><td><span class="nm">陆生</span><span class="sub">槟榔批发</span></td>
+<td>超市/生鲜</td><td>白云项目</td>
+<td class="num">50</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">106</td><td><span class="nm">陈生</span><span class="sub">强叔猪杂粥</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">107</td><td><span class="nm">刘生</span><span class="sub">有福鲜鸡煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">108</td><td><span class="nm">石生</span><span class="sub">连锁米粉</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">60</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-20</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="超市/生鲜">
+<td class="idx">109</td><td><span class="nm">谭小姐</span><span class="sub">便利店</span></td>
+<td>超市/生鲜</td><td>白云项目</td>
+<td class="num">60</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-20</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">110</td><td><span class="nm">黄生</span><span class="sub">清远脆皮鸡煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-20</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">111</td><td><span class="nm">张生</span><span class="sub">贵州地摊火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">112</td><td><span class="nm">张生</span><span class="sub">湘菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">113</td><td><span class="nm">王生</span><span class="sub">川菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">114</td><td><span class="nm">侯生</span><span class="sub">东北自助烤肉</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">150</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">115</td><td><span class="nm">李生</span><span class="sub">钵子菜</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">116</td><td><span class="nm">陈生</span><span class="sub">潮汕宵夜</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">117</td><td><span class="nm">刘生</span><span class="sub">小四川菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">118</td><td><span class="nm">刘生</span><span class="sub">小四川菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="服饰鞋包">
+<td class="idx">119</td><td><span class="nm">吴生</span><span class="sub">服装特卖</span></td>
+<td>服饰鞋包</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="SPA">
+<td class="idx">120</td><td><span class="nm">何生</span><span class="sub">按摩</span></td>
+<td>SPA</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">121</td><td><span class="nm">李生</span><span class="sub">麻辣烫</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>白云项目</td>
+<td class="num">100</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="仓储">
+<td class="idx">122</td><td><span class="nm">林生</span><span class="sub">仓库</span></td>
+<td>仓储</td><td>白云项目</td>
+<td class="num">500</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="办公">
+<td class="idx">123</td><td><span class="nm">李生</span><span class="sub">电商办公</span></td>
+<td>办公</td><td>白云项目</td>
+<td class="num">80</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="超市/生鲜">
+<td class="idx">124</td><td><span class="nm">王小姐</span><span class="sub">中介生鲜超市</span></td>
+<td>超市/生鲜</td><td>白云项目</td>
+<td class="num">500</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="桌球">
+<td class="idx">125</td><td><span class="nm">庄生</span><span class="sub">小铁桌球</span></td>
+<td>桌球</td><td>白云项目</td>
+<td class="num">600</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">126</td><td><span class="nm">蔡生</span><span class="sub">酒馆</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">127</td><td><span class="nm">朱生</span><span class="sub">粤菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">800</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">128</td><td><span class="nm">李生</span><span class="sub">私人会所</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">129</td><td><span class="nm">刘先生</span><span class="sub">东北菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">130</td><td><span class="nm">张先生</span><span class="sub">牛肉火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-23</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="白云项目" data-biz="超市/生鲜">
+<td class="idx">131</td><td><span class="nm">李小姐</span><span class="sub">生鲜超市</span></td>
+<td>超市/生鲜</td><td>白云项目</td>
+<td class="num">300</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-23</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">132</td><td><span class="nm">黄小姐</span><span class="sub">东北菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-23</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">133</td><td><span class="nm">王小姐</span><span class="sub">大排档</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-23</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">134</td><td><span class="nm">刘先生</span><span class="sub">私房菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-23</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="白云项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">135</td><td><span class="nm">陈小姐</span><span class="sub">湘菜</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>白云项目</td>
+<td class="num">200</td><td>曾令宝</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-23</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">136</td><td><span class="nm">郭小姐</span><span class="sub">德州酒馆</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>圣地新天地项目</td>
+<td class="num">200</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-07</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="少儿培训">
+<td class="idx">137</td><td><span class="nm">万先生</span><span class="sub">爱学习托管</span></td>
+<td>少儿培训</td><td>圣地新天地项目</td>
+<td class="num">350</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-09-28</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">138</td><td><span class="nm">何先生</span><span class="sub">德州酒馆</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>圣地新天地项目</td>
+<td class="num">200</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-01</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="理疗养生">
+<td class="idx">139</td><td><span class="nm">尹志强</span><span class="sub">筋骨有约</span></td>
+<td>理疗养生</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="理疗养生">
+<td class="idx">140</td><td><span class="nm">芳姐</span><span class="sub">奈晚推拿</span></td>
+<td>理疗养生</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="美容美发">
+<td class="idx">141</td><td><span class="nm">洗脸熊</span><span class="sub">洗脸熊</span></td>
+<td>美容美发</td><td>圣地新天地项目</td>
+<td class="num">50</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="儿童游乐">
+<td class="idx">142</td><td><span class="nm">何先生</span><span class="sub">BBC弹珠乐园</span></td>
+<td>儿童游乐</td><td>圣地新天地项目</td>
+<td class="num">50</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="茶饮咖啡（茶饮、奶茶、咖啡）">
+<td class="idx">143</td><td><span class="nm">罗小姐</span><span class="sub">蜜雪冰城</span></td>
+<td>茶饮咖啡（茶饮、奶茶、咖啡）</td><td>圣地新天地项目</td>
+<td class="num">50</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="美甲美睫">
+<td class="idx">144</td><td><span class="nm">刘广清</span><span class="sub">绿宝瓶美甲</span></td>
+<td>美甲美睫</td><td>圣地新天地项目</td>
+<td class="num">50</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="美容美发">
+<td class="idx">145</td><td><span class="nm">马小姐</span><span class="sub">亲艾</span></td>
+<td>美容美发</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="少儿培训">
+<td class="idx">146</td><td><span class="nm">陈教练</span><span class="sub">晨曦乒乓球</span></td>
+<td>少儿培训</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="少儿培训">
+<td class="idx">147</td><td><span class="nm">梁小姐</span><span class="sub">晟学素质成长中心</span></td>
+<td>少儿培训</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="少儿培训">
+<td class="idx">148</td><td><span class="nm">吴先生</span><span class="sub">腾飞摩天轮运动馆</span></td>
+<td>少儿培训</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="服饰鞋包">
+<td class="idx">149</td><td><span class="nm">孔先生</span><span class="sub">喜淘一品</span></td>
+<td>服饰鞋包</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">150</td><td><span class="nm">刘同文</span><span class="sub">菌山菌岭</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">300</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">151</td><td><span class="nm">孙先生</span><span class="sub">昊来了寿司</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="桌球">
+<td class="idx">152</td><td><span class="nm">李鹏</span><span class="sub">李鹏九九台球</span></td>
+<td>桌球</td><td>圣地新天地项目</td>
+<td class="num">350</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="影院">
+<td class="idx">153</td><td><span class="nm">李先生</span><span class="sub">范影城</span></td>
+<td>影院</td><td>圣地新天地项目</td>
+<td class="num">1500</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-01</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">154</td><td><span class="nm">胡总</span><span class="sub">靓靓的海海鲜自助</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">350</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">155</td><td><span class="nm">曹林波</span><span class="sub">靓渔盛宴</span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>圣地新天地项目</td>
+<td class="num">350</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">156</td><td><span class="nm">彭先生</span><span class="sub">新旺茶餐厅</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">157</td><td><span class="nm">陆坤</span><span class="sub">盛歌汇</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">1500</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="轻食（沙拉 / 谷物碗 / 健康简餐）">
+<td class="idx">158</td><td><span class="nm">智哥</span><span class="sub">柳大毛螺蛳粉</span></td>
+<td>轻食（沙拉 / 谷物碗 / 健康简餐）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="轻食（沙拉 / 谷物碗 / 健康简餐）">
+<td class="idx">159</td><td><span class="nm">黄先生</span><span class="sub">益园优品</span></td>
+<td>轻食（沙拉 / 谷物碗 / 健康简餐）</td><td>圣地新天地项目</td>
+<td class="num">60</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="影院">
+<td class="idx">160</td><td><span class="nm">张小姐</span><span class="sub">大地影城</span></td>
+<td>影院</td><td>圣地新天地项目</td>
+<td class="num">1500</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">161</td><td><span class="nm">刘性中</span><span class="sub">简潮</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">162</td><td><span class="nm">魏伟陆</span><span class="sub">A赖胖子肉蟹煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="服饰鞋包">
+<td class="idx">163</td><td><span class="nm">程百元</span><span class="sub">三枪</span></td>
+<td>服饰鞋包</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">164</td><td><span class="nm">彭先生</span><span class="sub">猪腰世家</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">430</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">165</td><td><span class="nm">戚言榜</span><span class="sub">巴奴火锅</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">350</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="服饰鞋包">
+<td class="idx">166</td><td><span class="nm">王先生</span><span class="sub">FMB美式潮牌</span></td>
+<td>服饰鞋包</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">167</td><td><span class="nm">韩涛</span><span class="sub">懂鹅茶餐厅</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="美容美发">
+<td class="idx">168</td><td><span class="nm">郭先生</span><span class="sub">几点洗面</span></td>
+<td>美容美发</td><td>圣地新天地项目</td>
+<td class="num">50</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="棋牌">
+<td class="idx">169</td><td><span class="nm">陈先生</span><span class="sub">乐在其中棋牌</span></td>
+<td>棋牌</td><td>圣地新天地项目</td>
+<td class="num">450</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="">
+<td class="idx">170</td><td><span class="nm">马泽锋</span><span class="sub">西关金茂</span></td>
+<td></td><td>圣地新天地项目</td>
+<td class="num">15</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="">
+<td class="idx">171</td><td><span class="nm">张超</span><span class="sub">筋骨堂</span></td>
+<td></td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="服饰鞋包">
+<td class="idx">172</td><td><span class="nm">陈学境</span><span class="sub">跑式户外</span></td>
+<td>服饰鞋包</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="茶饮咖啡（茶饮、奶茶、咖啡）">
+<td class="idx">173</td><td><span class="nm">罗小姐</span><span class="sub">蜜雪冰城</span></td>
+<td>茶饮咖啡（茶饮、奶茶、咖啡）</td><td>圣地新天地项目</td>
+<td class="num">50</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="">
+<td class="idx">174</td><td><span class="nm">谢先生</span><span class="sub">好想来</span></td>
+<td></td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="服饰鞋包">
+<td class="idx">175</td><td><span class="nm">刘先生</span><span class="sub">绿光派对</span></td>
+<td>服饰鞋包</td><td>圣地新天地项目</td>
+<td class="num">153</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">176</td><td><span class="nm">田闯</span><span class="sub">焗小黄</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">177</td><td><span class="nm">王浩博</span><span class="sub">杯子星球</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">50</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">178</td><td><span class="nm">胡小姐</span><span class="sub">金牌烧鹅</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="美容美发">
+<td class="idx">179</td><td><span class="nm">陈先生</span><span class="sub">赫本美容</span></td>
+<td>美容美发</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">180</td><td><span class="nm">张先生</span><span class="sub">环璟海鲜自助</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">330</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">181</td><td><span class="nm">吴先生</span><span class="sub">御厨神鸡煲</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">250</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="儿童游乐">
+<td class="idx">182</td><td><span class="nm">吴先生</span><span class="sub">腾飞摩天轮运动馆</span></td>
+<td>儿童游乐</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">183</td><td><span class="nm">韩佳音</span><span class="sub">池奈蛋包饭</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">184</td><td><span class="nm">张先生</span><span class="sub">阿婆牛杂</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">185</td><td><span class="nm">郑总</span><span class="sub">菌山集（加盟）</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">350</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">186</td><td><span class="nm">侯静</span><span class="sub">匠本米所</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="儿童游乐">
+<td class="idx">187</td><td><span class="nm">王总</span><span class="sub">恐龙乐园</span></td>
+<td>儿童游乐</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="KTV">
+<td class="idx">188</td><td><span class="nm">陆坤</span><span class="sub">盛歌汇</span></td>
+<td>KTV</td><td>圣地新天地项目</td>
+<td class="num">1000</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">189</td><td><span class="nm">庄先生</span><span class="sub">柳大毛螺狮粉</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">190</td><td><span class="nm">黄先生</span><span class="sub">益园优品</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="轻食（沙拉 / 谷物碗 / 健康简餐）">
+<td class="idx">191</td><td><span class="nm">胡先生</span><span class="sub">靓靓的海海鲜自助</span></td>
+<td>轻食（沙拉 / 谷物碗 / 健康简餐）</td><td>圣地新天地项目</td>
+<td class="num">300</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">192</td><td><span class="nm">曹林波</span><span class="sub">靓渔盛宴</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">250</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">193</td><td><span class="nm">刘同文</span><span class="sub">菌山菌岭</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">250</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">194</td><td><span class="nm">孙先生</span><span class="sub">昊来了寿司</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="桌球">
+<td class="idx">195</td><td><span class="nm">李鹏</span><span class="sub">九九台球</span></td>
+<td>桌球</td><td>圣地新天地项目</td>
+<td class="num">1500</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">196</td><td><span class="nm">郑先生</span><span class="sub">菌山集（加盟）</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">300</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">197</td><td><span class="nm">魏伟陆</span><span class="sub">赖胖子肉蟹煲</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">250</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">198</td><td><span class="nm">陈华新</span><span class="sub">百潮膳香鸡</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">250</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="学科/艺术/职业技能培训">
+<td class="idx">199</td><td><span class="nm">周伟</span><span class="sub">新精武教育</span></td>
+<td>学科/艺术/职业技能培训</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">200</td><td><span class="nm">张晓龙</span><span class="sub">光刻眼镜</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">201</td><td><span class="nm">金秀峰</span><span class="sub">九龙茶记</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">202</td><td><span class="nm">张先生</span><span class="sub">称重自选快餐</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="美容美发">
+<td class="idx">203</td><td><span class="nm">毕凤美</span><span class="sub">可复美</span></td>
+<td>美容美发</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">204</td><td><span class="nm">侯静</span><span class="sub">匠本米所</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">205</td><td><span class="nm">谭先生</span><span class="sub">擂饭</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="家居饰品/生活用品">
+<td class="idx">206</td><td><span class="nm">谭先生</span><span class="sub">美天惠</span></td>
+<td>家居饰品/生活用品</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">207</td><td><span class="nm">朱先生</span><span class="sub">粉录记</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">208</td><td><span class="nm">李先生</span><span class="sub">北国小镇</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">350</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">209</td><td><span class="nm">周建华</span><span class="sub">酥小牛</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">250</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="小吃（炸物、卤味、小食档口）">
+<td class="idx">210</td><td><span class="nm">陈小姐</span><span class="sub">绵绵冰</span></td>
+<td>小吃（炸物、卤味、小食档口）</td><td>圣地新天地项目</td>
+<td class="num">50</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="家居饰品/生活用品">
+<td class="idx">211</td><td><span class="nm">周先生</span><span class="sub">丽人诗歌</span></td>
+<td>家居饰品/生活用品</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="简餐/快餐（便当、粉面、麻辣烫）">
+<td class="idx">212</td><td><span class="nm">施先生</span><span class="sub">朴大叔拌饭</span></td>
+<td>简餐/快餐（便当、粉面、麻辣烫）</td><td>圣地新天地项目</td>
+<td class="num">120</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">213</td><td><span class="nm">郭琪</span><span class="sub">北京菜大鸭梨</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">350</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="服饰鞋包">
+<td class="idx">214</td><td><span class="nm">唐玉海</span><span class="sub">迷后女装</span></td>
+<td>服饰鞋包</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">215</td><td><span class="nm">陈正武</span><span class="sub">云味馆</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">216</td><td><span class="nm">岑康劲</span><span class="sub">潮汕食落</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">430</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">217</td><td><span class="nm">毛先生</span><span class="sub">米仓食堂</span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>圣地新天地项目</td>
+<td class="num">250</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">218</td><td><span class="nm">孟先生</span><span class="sub">BOOYAKA美式烤肉</span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>圣地新天地项目</td>
+<td class="num">200</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="烘焙甜品">
+<td class="idx">219</td><td><span class="nm">周先生</span><span class="sub">粤禾记鲜糕点</span></td>
+<td>烘焙甜品</td><td>圣地新天地项目</td>
+<td class="num">80</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="服饰鞋包">
+<td class="idx">220</td><td><span class="nm">陈华生</span><span class="sub">大众服饰</span></td>
+<td>服饰鞋包</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="家居饰品/生活用品">
+<td class="idx">221</td><td><span class="nm">张馨</span><span class="sub">家纺歌莉亚</span></td>
+<td>家居饰品/生活用品</td><td>圣地新天地项目</td>
+<td class="num">150</td><td>蔡俊贤</td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="圣地新天地项目" data-biz="棋牌">
+<td class="idx">222</td><td><span class="nm">张建忠</span><span class="sub">星宫棋牌</span></td>
+<td>棋牌</td><td>圣地新天地项目</td>
+<td class="num">500</td><td></td>
+<td><span class="badge b-dead">已放弃</span></td><td></td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="云方商汇项目" data-biz="住宅">
+<td class="idx">223</td><td><span class="nm"></span><span class="sub"></span></td>
+<td>住宅</td><td>云方商汇项目</td>
+<td class="num">30</td><td>常丽娟</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="云方商汇项目" data-biz="住宅">
+<td class="idx">224</td><td><span class="nm">小国</span><span class="sub"></span></td>
+<td>住宅</td><td>云方商汇项目</td>
+<td class="num">60</td><td>常丽娟</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">225</td><td><span class="nm">李老师</span><span class="sub">博雅教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">100</td><td>许红敏</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-09-27</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">226</td><td><span class="nm">黄老师</span><span class="sub">好字笔墨</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">50</td><td>许红敏</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">227</td><td><span class="nm">李老师</span><span class="sub">明人教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-27</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">228</td><td><span class="nm">优儿教育</span><span class="sub">优儿教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-27</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">229</td><td><span class="nm">劲健教育</span><span class="sub">劲健教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-27</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">230</td><td><span class="nm">倬曦教育</span><span class="sub">倬曦教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-28</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">231</td><td><span class="nm">六一教育</span><span class="sub">六一教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-28</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">232</td><td><span class="nm">江老师</span><span class="sub">道云书画</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">150</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2025-12-10</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">233</td><td><span class="nm">虫虫发现</span><span class="sub">虫虫发现</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2025-12-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">234</td><td><span class="nm">钟老师</span><span class="sub">小满书法</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2025-07-21</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">235</td><td><span class="nm">小脚尖艺术</span><span class="sub">小脚尖艺术</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-29</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">236</td><td><span class="nm">环雅教育</span><span class="sub">环雅教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-29</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">237</td><td><span class="nm">拓维教育</span><span class="sub">拓维教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-29</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">238</td><td><span class="nm">谢老师</span><span class="sub">浠源教育语言艺术</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-29</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">239</td><td><span class="nm">悦恩教育</span><span class="sub">悦恩教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">0</td><td>许红敏</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-10-29</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="银燕教育成项目" data-biz="少儿培训">
+<td class="idx">240</td><td><span class="nm">李老师</span><span class="sub">博雅教育</span></td>
+<td>少儿培训</td><td>银燕教育成项目</td>
+<td class="num">100</td><td>许红敏</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-09-27</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="双成项目" data-biz="汽车贸易">
+<td class="idx">241</td><td><span class="nm">阮生</span><span class="sub">品牌A</span></td>
+<td>汽车贸易</td><td>双成项目</td>
+<td class="num">1000</td><td>郑真奇</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-01</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="双成项目" data-biz="维修">
+<td class="idx">242</td><td><span class="nm">bop贴膜</span><span class="sub">bop</span></td>
+<td>维修</td><td>双成项目</td>
+<td class="num">1000</td><td>郑真奇</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-08-01</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="仓储">
+<td class="idx">243</td><td><span class="nm">徐生</span><span class="sub"></span></td>
+<td>仓储</td><td>双成项目</td>
+<td class="num">400</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-06</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">244</td><td><span class="nm">梦丽莎</span><span class="sub">梦丽莎</span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">5000</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="美容美发">
+<td class="idx">245</td><td><span class="nm">伏小姐</span><span class="sub"></span></td>
+<td>美容美发</td><td>双成项目</td>
+<td class="num">50</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="汽车贸易">
+<td class="idx">246</td><td><span class="nm">代生</span><span class="sub"></span></td>
+<td>汽车贸易</td><td>双成项目</td>
+<td class="num">2000</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-05</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="布料贸易">
+<td class="idx">247</td><td><span class="nm">mark</span><span class="sub"></span></td>
+<td>布料贸易</td><td>双成项目</td>
+<td class="num">50</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-04</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="美容美发">
+<td class="idx">248</td><td><span class="nm">李生</span><span class="sub"></span></td>
+<td>美容美发</td><td>双成项目</td>
+<td class="num">150</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">249</td><td><span class="nm">卡卡西</span><span class="sub">卡卡西</span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">150</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">250</td><td><span class="nm">欧生</span><span class="sub"></span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））">
+<td class="idx">251</td><td><span class="nm">黄生</span><span class="sub"></span></td>
+<td>餐吧（餐酒馆、小酒馆（带简餐 + 酒水，夜间经济配套））</td><td>双成项目</td>
+<td class="num">500</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-01</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="桌球">
+<td class="idx">252</td><td><span class="nm">黄生</span><span class="sub"></span></td>
+<td>桌球</td><td>双成项目</td>
+<td class="num">500</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-01</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">253</td><td><span class="nm">锋哥</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-01</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="少儿培训">
+<td class="idx">254</td><td><span class="nm">赛恩斯</span><span class="sub">赛恩斯</span></td>
+<td>少儿培训</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="直播间">
+<td class="idx">255</td><td><span class="nm">陈生</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-01</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="房产中介">
+<td class="idx">256</td><td><span class="nm">韩生</span><span class="sub"></span></td>
+<td>房产中介</td><td>双成项目</td>
+<td class="num">1</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="基础建材">
+<td class="idx">257</td><td><span class="nm">谢生</span><span class="sub"></span></td>
+<td>基础建材</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-01</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="瓷砖/石材">
+<td class="idx">258</td><td><span class="nm">高生</span><span class="sub">新元素</span></td>
+<td>瓷砖/石材</td><td>双成项目</td>
+<td class="num">400</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-02</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="房产中介">
+<td class="idx">259</td><td><span class="nm">杨小姐</span><span class="sub"></span></td>
+<td>房产中介</td><td>双成项目</td>
+<td class="num">1</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-03</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="家电厨电">
+<td class="idx">260</td><td><span class="nm">谬生</span><span class="sub">美的</span></td>
+<td>家电厨电</td><td>双成项目</td>
+<td class="num">1</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">261</td><td><span class="nm">冯生</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">260</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="直播间">
+<td class="idx">262</td><td><span class="nm">陈生</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="瓷砖/石材">
+<td class="idx">263</td><td><span class="nm">杨生</span><span class="sub">裕成</span></td>
+<td>瓷砖/石材</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">264</td><td><span class="nm">俊彩螭</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-09</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="直播间">
+<td class="idx">265</td><td><span class="nm">谭生</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-11</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">266</td><td><span class="nm">卢小姐</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-11</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">267</td><td><span class="nm">毕小姐</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-11</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="直播间">
+<td class="idx">268</td><td><span class="nm">雨婷</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-11</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="理疗养生">
+<td class="idx">269</td><td><span class="nm">无限极</span><span class="sub"></span></td>
+<td>理疗养生</td><td>双成项目</td>
+<td class="num">50</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-11</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">270</td><td><span class="nm">黄生</span><span class="sub"></span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">271</td><td><span class="nm">花木马</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">272</td><td><span class="nm">焦小姐</span><span class="sub"></span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="办公">
+<td class="idx">273</td><td><span class="nm">安意然</span><span class="sub"></span></td>
+<td>办公</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="定制家居">
+<td class="idx">274</td><td><span class="nm">刘小姐</span><span class="sub"></span></td>
+<td>定制家居</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-12</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="定制家居">
+<td class="idx">275</td><td><span class="nm">李小姐</span><span class="sub"></span></td>
+<td>定制家居</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-14</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="成人教育">
+<td class="idx">276</td><td><span class="nm">林校</span><span class="sub"></span></td>
+<td>成人教育</td><td>双成项目</td>
+<td class="num">500</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="卫浴洁具">
+<td class="idx">277</td><td><span class="nm">段生</span><span class="sub"></span></td>
+<td>卫浴洁具</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-16</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">278</td><td><span class="nm">富士达</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">50</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-16</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="双成项目" data-biz="汽车贸易">
+<td class="idx">279</td><td><span class="nm">阮生</span><span class="sub">品牌A</span></td>
+<td>汽车贸易</td><td>双成项目</td>
+<td class="num">1000</td><td>郑真奇</td>
+<td><span class="badge b-hot">跟进中</span></td><td>0216-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="房产中介">
+<td class="idx">280</td><td><span class="nm">富盈广告</span><span class="sub"></span></td>
+<td>房产中介</td><td>双成项目</td>
+<td class="num">1</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">281</td><td><span class="nm">芙格皮具</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="软装布艺">
+<td class="idx">282</td><td><span class="nm">陈生</span><span class="sub"></span></td>
+<td>软装布艺</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">283</td><td><span class="nm">冯秋浩</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="跟进中" data-intent="是" data-project="双成项目" data-biz="汽车贸易">
+<td class="idx">284</td><td><span class="nm">阮生</span><span class="sub">品牌A</span></td>
+<td>汽车贸易</td><td>双成项目</td>
+<td class="num">1000</td><td>郑真奇</td>
+<td><span class="badge b-hot">跟进中</span></td><td>2026-11-15</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）">
+<td class="idx">285</td><td><span class="nm">陈生</span><span class="sub"></span></td>
+<td>特色餐饮（传统火锅、海鲜火锅、烤肉、猪肚鸡、特色煲类(大型店)）</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-17</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="房产中介">
+<td class="idx">286</td><td><span class="nm">陆探长</span><span class="sub"></span></td>
+<td>房产中介</td><td>双成项目</td>
+<td class="num">1</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-17</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">287</td><td><span class="nm">李康阳</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-17</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="超市/生鲜">
+<td class="idx">288</td><td><span class="nm">万小姐</span><span class="sub"></span></td>
+<td>超市/生鲜</td><td>双成项目</td>
+<td class="num">1</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-17</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="成人教育">
+<td class="idx">289</td><td><span class="nm">刘生</span><span class="sub"></span></td>
+<td>成人教育</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-17</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="灯具照明">
+<td class="idx">290</td><td><span class="nm">杨生</span><span class="sub"></span></td>
+<td>灯具照明</td><td>双成项目</td>
+<td class="num">500</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-18</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="美妆护肤">
+<td class="idx">291</td><td><span class="nm">陈小姐</span><span class="sub"></span></td>
+<td>美妆护肤</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-18</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="卫浴洁具">
+<td class="idx">292</td><td><span class="nm">蔡生</span><span class="sub"></span></td>
+<td>卫浴洁具</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-18</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="直播间">
+<td class="idx">293</td><td><span class="nm">郑生</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-18</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="直播间">
+<td class="idx">294</td><td><span class="nm">胡生</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">200</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-18</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="服饰鞋包">
+<td class="idx">295</td><td><span class="nm">车生</span><span class="sub"></span></td>
+<td>服饰鞋包</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）">
+<td class="idx">296</td><td><span class="nm">李生</span><span class="sub"></span></td>
+<td>中式正餐（素食、粤菜、川菜、湘菜、江浙菜、西北菜、徽菜、融合菜、酒楼/粤式早茶）</td><td>双成项目</td>
+<td class="num">300</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="直播间">
+<td class="idx">297</td><td><span class="nm">啊清哥</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="直播间">
+<td class="idx">298</td><td><span class="nm">冼小姐</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="灯具照明">
+<td class="idx">299</td><td><span class="nm">陈晓峰</span><span class="sub"></span></td>
+<td>灯具照明</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-19</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="直播间">
+<td class="idx">300</td><td><span class="nm">陈生</span><span class="sub"></span></td>
+<td>直播间</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-20</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="房产中介">
+<td class="idx">301</td><td><span class="nm">聂生</span><span class="sub"></span></td>
+<td>房产中介</td><td>双成项目</td>
+<td class="num">5000</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-20</td>
+</tr>
+<tr data-status="已放弃" data-intent="是" data-project="双成项目" data-biz="办公">
+<td class="idx">302</td><td><span class="nm">冯生</span><span class="sub"></span></td>
+<td>办公</td><td>双成项目</td>
+<td class="num">260</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-20</td>
+</tr>
+<tr data-status="已放弃" data-intent="否" data-project="双成项目" data-biz="瓷砖/石材">
+<td class="idx">303</td><td><span class="nm">三绎石材</span><span class="sub"></span></td>
+<td>瓷砖/石材</td><td>双成项目</td>
+<td class="num">100</td><td>郑真奇</td>
+<td><span class="badge b-dead">已放弃</span></td><td>2026-11-20</td>
+</tr></tbody></table></div>
+</div>
+
+<div class="section-t">作战建议 · ACTION INTELLIGENCE</div>
+<div class="rec"><h3>🎯 基于数据分析的 6 条立即行动建议</h3><ol>
+<li><b>11月新增 210 条线索（环比+1650%）</b> — 获客能力已验证，但跟进中仅 26 条。立即分配团队集中跟进，避免线索过期流失。</li>
+<li><b>146 条"有意向但已放弃"客户是沉睡金矿</b> — 这类客户曾有明确需求，重点回访前 20 条大面积客户，挖掘放弃原因是否可逆转。</li>
+<li><b>铺位/位置不符合客户预期 居流失原因首位（75 例）</b> — 说明铺位匹配度是最大痛点，建议建立客户需求-铺位智能预匹配机制，减少无效带看。</li>
+<li><b>预算不足（49例）与 租金过高（42例）</b> — 价格敏感客户占比高，建议设计阶梯租金/免租期方案包，给谈判人员更多弹药。</li>
+<li><b>获客渠道 电话(120) + 线上(82) 占主流</b> — 转介绍仅 23 例，建议建立老客户转介绍激励制度，降低获客成本。</li>
+<li><b>新签面积实际 6,023.3㎡ 超计划 5,638.4㎡，达成 106.8%</b> — 但租管收入口径需核对，建议财务复核计划与实际统计周期一致性后再对外汇报。</li>
+</ol></div>
+
+<footer>招商情报作战终端 Pro · 数据驱动决策 · 内部情报 请勿外传<br>Data Source: 招商客户作战指挥中心 · Generated 2026-11-26 16:37</footer>
+</div>
+
+<script>
+// 通用图表绘制（无外部依赖）
+const C={cy:'#22d3ee',gr:'#34d399',or:'#fb923c',rd:'#f87171',pu:'#a78bfa',line:'#1e2c45',dim:'#7d8ba3'};
+function setup(id){const c=document.getElementById(id),r=c.parentElement.getBoundingClientRect(),d=window.devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;c.style.width=r.width+'px';c.style.height=r.height+'px';const x=c.getContext('2d');x.scale(d,d);return {x,w:r.width,h:r.height}}
+function bars(id,labels,series,colors){const {x,w,h}=setup(id);const pad={l:42,r:12,t:16,b:34};const cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;const max=Math.max(...series.flat())*1.1||1;
+x.strokeStyle=C.line;x.lineWidth=1;for(let i=0;i<=4;i++){let y=pad.t+ch-ch*i/4;x.beginPath();x.moveTo(pad.l,y);x.lineTo(w-pad.r,y);x.stroke();x.fillStyle=C.dim;x.font='10px sans-serif';x.textAlign='right';x.fillText((max*i/4).toFixed(max>100?0:1),pad.l-6,y+3)}
+const n=labels.length,bw=cw/n,gap=bw/(series.length+1);series.forEach((s,si)=>{s.forEach((v,i)=>{const bh=v/max*ch;const bx=pad.l+i*bw+gap*(si+1);x.fillStyle=colors[si];x.fillRect(bx,pad.t+ch-bh,gap*.9,bh)})});
+x.fillStyle=C.dim;x.font='10px sans-serif';x.textAlign='center';labels.forEach((l,i)=>x.fillText(l,pad.l+i*bw+bw/2,h-12))}
+function hbars(id,labels,vals,color){const {x,w,h}=setup(id);const pad={l:110,r:40,t:6,b:6};const cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;const max=Math.max(...vals)||1;const rh=ch/labels.length;
+labels.forEach((l,i)=>{const y=pad.t+i*rh;const bw=vals[i]/max*cw;x.fillStyle=C.dim;x.font='10px sans-serif';x.textAlign='right';x.fillText(l.length>10?l.slice(0,10)+'…':l,pad.l-6,y+rh/2+3);x.fillStyle=color;x.fillRect(pad.l,y+rh*.2,bw,rh*.6);x.fillStyle='#e6edf7';x.textAlign='left';x.font='10px sans-serif';x.fillText(vals[i],pad.l+bw+4,y+rh/2+3)})}
+function doughnut(id,labels,vals,colors){const {x,w,h}=setup(id);const cx=w/2,cy=h/2,R=Math.min(w,h)/2-12,r=R*.6;const total=vals.reduce((a,b)=>a+b,0);let a0=-Math.PI/2;
+vals.forEach((v,i)=>{const a1=a0+v/total*Math.PI*2;x.beginPath();x.arc(cx,cy,R,a0,a1);x.arc(cx,cy,r,a1,a0,true);x.closePath();x.fillStyle=colors[i%colors.length];x.fill();a0=a1});
+x.fillStyle='#e6edf7';x.font='bold 18px sans-serif';x.textAlign='center';x.fillText(total,cx,cy+2);x.fillStyle=C.dim;x.font='10px sans-serif';x.fillText('客户总数',cx,cy+18);
+x.font='10px sans-serif';labels.forEach((l,i)=>{const ly=cy-R-2+i*16;x.fillStyle=colors[i%colors.length];x.fillRect(8,ly-8,8,8);x.fillStyle=C.dim;x.textAlign='left';x.fillText(l+'  '+vals[i],20,ly)})}
+
+bars('c1',["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],[[0, 0, 595.9, 1335.19, 1685.134, 1437.845, 247.17, 148.8, 188.4, 0, 0, 0],[7.07, 0, 0, 280.454, 541, 415.04, 312.51, 3666.973, 440.62, 166.095, 193.5, 0]],[C.line.replace('#','#'),C.cy]);
+bars('c2',["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],[[0, 0, 5.04, 11.43, 10.87, 8.99, 1.86, 0.92, 1.33, 0, 0, 0],[0.3, 0, 0, 1.58, 6.6, 2.25, 3.36, 10.8, 2.64, 0.99, 1.44, 0]],['#334155',C.pu]);
+doughnut('c3',["跟进中", "已成交", "已放弃"],[26, 2, 275],[C.or,C.gr,'#334155']);
+hbars('c4',["中式正餐（素食、粤菜、川菜、", "特色餐饮（传统火锅、海鲜火锅", "简餐/快餐（便当、粉面、麻辣", "服饰鞋包", "少儿培训", "餐吧（餐酒馆、小酒馆（带简餐", "超市/生鲜", "直播间", "美容美发", "办公"],[48, 47, 32, 23, 21, 14, 9, 9, 7, 6],C.cy);
+hbars('c5',["电话", "其他线上方式", "电话邀约", "转介绍", "外出拓展", "58同城", "中介", "客户自行上门"],[120, 82, 43, 23, 14, 5, 5, 2],C.pu);
+hbars('c6',["铺位/位置不符合客户预期", "预算不足", "租金过高", "品牌收缩、闭店、暂无拓店计划", "市场环境影响", "仅比价"],[75, 49, 42, 23, 23, 9],C.rd);
+hbars('c7',["曾令宝", "蔡俊贤", "郑真奇", "张汉翔", "许红敏", "董凡", "常丽娟"],[98, 86, 63, 24, 16, 13, 2],C.gr);
+
+function filter(){const q=document.getElementById('q').value.toLowerCase(),s=document.getElementById('fstatus').value,it=document.getElementById('fintent').value,p=document.getElementById('fproj').value;let n=0;
+document.querySelectorAll('#tbody tr').forEach(tr=>{const ok=(!q||tr.textContent.toLowerCase().includes(q))&&(!s||tr.dataset.status===s)&&(!it||tr.dataset.intent===it)&&(!p||tr.dataset.project===p);tr.style.display=ok?'':'none';if(ok)n++});
+document.getElementById('cnt').textContent='显示 '+n+' / 303 条'}
+window.addEventListener('resize',()=>{bars('c1',["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],[[0, 0, 595.9, 1335.19, 1685.134, 1437.845, 247.17, 148.8, 188.4, 0, 0, 0],[7.07, 0, 0, 280.454, 541, 415.04, 312.51, 3666.973, 440.62, 166.095, 193.5, 0]],['#334155',C.cy]);bars('c2',["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],[[0, 0, 5.04, 11.43, 10.87, 8.99, 1.86, 0.92, 1.33, 0, 0, 0],[0.3, 0, 0, 1.58, 6.6, 2.25, 3.36, 10.8, 2.64, 0.99, 1.44, 0]],['#334155',C.pu]);doughnut('c3',["跟进中", "已成交", "已放弃"],[26, 2, 275],[C.or,C.gr,'#334155']);hbars('c4',["中式正餐（素食、粤菜、川菜、", "特色餐饮（传统火锅、海鲜火锅", "简餐/快餐（便当、粉面、麻辣", "服饰鞋包", "少儿培训", "餐吧（餐酒馆、小酒馆（带简餐", "超市/生鲜", "直播间", "美容美发", "办公"],[48, 47, 32, 23, 21, 14, 9, 9, 7, 6],C.cy);hbars('c5',["电话", "其他线上方式", "电话邀约", "转介绍", "外出拓展", "58同城", "中介", "客户自行上门"],[120, 82, 43, 23, 14, 5, 5, 2],C.pu);hbars('c6',["铺位/位置不符合客户预期", "预算不足", "租金过高", "品牌收缩、闭店、暂无拓店计划", "市场环境影响", "仅比价"],[75, 49, 42, 23, 23, 9],C.rd);hbars('c7',["曾令宝", "蔡俊贤", "郑真奇", "张汉翔", "许红敏", "董凡", "常丽娟"],[98, 86, 63, 24, 16, 13, 2],C.gr)});
+filter();
+</script>
+<script>
+function openImport(){document.getElementById('mask').classList.add('on');document.getElementById('impMsg').textContent='';}
+function closeImport(){document.getElementById('mask').classList.remove('on');}
+document.getElementById('mask').addEventListener('click',e=>{if(e.target.id==='mask')closeImport()});
+function onFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{document.getElementById('csv').value=r.result;document.getElementById('impMsg').innerHTML='<span class="ok">已载入文件：'+f.name+'（'+(r.result.length/1024).toFixed(1)+' KB），点"开始导入"</span>'};r.readAsText(f,'UTF-8');}
+function parseCSV(t){t=t.replace(/^\uFEFF/,'').trim();const rows=[];let row=[],cell='',q=false;
+for(let i=0;i<t.length;i++){const c=t[i];if(c==='"'){if(q&&t[i+1]==='"'){cell+='"';i++}else q=!q}else if(c===','&&!q){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&t[i+1]==='\n')i++;row.push(cell);if(row.some(x=>x!==''))rows.push(row);row=[];cell=''}else cell+=c}
+row.push(cell);if(row.some(x=>x!==''))rows.push(row);return rows;}
+const ALIAS={
+'客户名称':['客户名称','客户','姓名','名称','client','name'],
+'品牌名称':['品牌名称','品牌'],
+'经营业态':['经营业态','业态','行业','品类'],
+'意向面积（㎡）':['意向面积（㎡）','意向面积','面积','面积㎡','面积（㎡）'],
+'当前状态':['当前状态','状态','status'],
+'是否有意向':['是否有意向','意向','有意向'],
+'项目名称':['项目名称','项目','意向项目'],
+'负责人':['负责人','跟进人','owner'],
+'客户来源':['客户来源','来源','渠道'],
+'最近跟进日期':['最近跟进日期','跟进日期','最近跟进','日期']
+};
+function norm(s){return String(s||'').toLowerCase().replace(/[\s（）()㎡]/g,'')}
+function findCol(headers,field){const cands=ALIAS[field];for(const c of cands){const nc=norm(c);for(let i=0;i<headers.length;i++){if(norm(headers[i])===nc)return i}}return -1}
+function num(v){const m=String(v||'').match(/[0-9]+(?:\.[0-9]+)?/);return m?parseFloat(m[0]):0}
+function doImport(){
+const raw=document.getElementById('csv').value.trim();const msg=document.getElementById('impMsg');
+if(!raw){msg.innerHTML='<span class="err">请先粘贴 CSV 内容或上传文件</span>';return}
+let rows;
+try{
+if(raw[0]==='['){const j=JSON.parse(raw);rows=[Object.keys(j[0]||{}),...j.map(o=>Object.keys(j[0]||{}).map(k=>o[k]??''))]}
+else rows=parseCSV(raw);
+}catch(err){msg.innerHTML='<span class="err">解析失败：'+err.message+'</span>';return}
+if(rows.length<2){msg.innerHTML='<span class="err">数据不足，至少需要表头 + 1 行数据</span>';return}
+const h=rows[0],idx={};for(const f in ALIAS)idx[f]=findCol(h,f);
+const get=(r,f)=>idx[f]>=0?(r[idx[f]]??''):'';
+const list=[];
+for(let i=1;i<rows.length;i++){const r=rows[i];list.push({
+'客户名称':get(r,'客户名称')||('客户'+(i)),'品牌名称':get(r,'品牌名称'),'经营业态':get(r,'经营业态'),
+'意向面积（㎡）':get(r,'意向面积（㎡）'),'当前状态':get(r,'当前状态')||'跟进中','是否有意向':get(r,'是否有意向'),
+'项目名称':get(r,'项目名称')||'未分类','负责人':get(r,'负责人'),'客户来源':get(r,'客户来源'),'最近跟进日期':get(r,'最近跟进日期')});}
+// 重建表格
+const tb=document.getElementById('tbody');
+tb.innerHTML=list.map((c,i)=>{const st=c['当前状态'],badge=st.indexOf('成交')>=0?'b-done':(st.indexOf('放弃')>=0?'b-dead':'b-hot');
+return '<tr data-status="'+st+'" data-intent="'+c['是否有意向']+'" data-project="'+c['项目名称']+'" data-biz="'+c['经营业态']+'">'+
+'<td class="idx">'+(i+1)+'</td><td><span class="nm">'+c['客户名称']+'</span><span class="sub">'+c['品牌名称']+'</span></td>'+
+'<td>'+c['经营业态']+'</td><td>'+c['项目名称']+'</td><td class="num">'+num(c['意向面积（㎡）'])+'</td>'+
+'<td>'+c['负责人']+'</td><td><span class="badge '+badge+'">'+st+'</span></td><td>'+c['最近跟进日期']+'</td></tr>'}).join('');
+// 更新项目筛选
+const ps=[...new Set(list.map(c=>c['项目名称']))].sort();
+document.getElementById('fproj').innerHTML='<option value="">全部项目</option>'+ps.map(p=>'<option value="'+p+'">'+p+'</option>').join('');
+// 更新 KPI
+const intent=list.filter(c=>c['是否有意向'].indexOf('是')>=0).length;
+const following=list.filter(c=>c['当前状态'].indexOf('跟进')>=0).length;
+const done=list.filter(c=>c['当前状态'].indexOf('成交')>=0).length;
+const areaT=list.reduce((a,c)=>a+num(c['意向面积（㎡）']),0);
+const vals=[list.length,intent,following,done,Math.round(areaT).toLocaleString(),kpi6new()];
+const kids=document.querySelectorAll('.kpi .v');const labels=['累计客户池','意向客户','跟进中','已成交','累计跟进面积','11月新增'];
+kids.forEach((el,i)=>{if(i<vals.length)el.textContent=vals[i]});
+window.CUSTOMERS=list;
+filter();
+msg.innerHTML='<span class="ok">✓ 成功导入 '+list.length+' 条客户数据，看板已刷新（当前为该浏览器会话，刷新页面恢复演示数据）</span>';
+}
+function kpi6new(){const el=document.querySelectorAll('.kpi .v')[5];return el?el.textContent:'—'}
+</script>
+</body></html>
